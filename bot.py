@@ -1,4 +1,4 @@
-﻿import requests
+import requests
 import time
 import random
 from colorama import init, Fore, Style
@@ -13,6 +13,7 @@ DAILY_CHECKIN_URL = "https://api.labr.meme/api/v1/daily-rewards"
 CLAIM_REWARD_URL = "https://api.labr.meme/api/v1/location/collect-reward"
 COLLECT_COIN_URL = "https://api.labr.meme/api/v1/collect-coin"
 RECOVER_COIN_URL = "https://api.labr.meme/api/v1/collect-coin/recover-coin"
+START_DIGGING_URL = "https://api.labr.meme/api/v1/location/start-digging"
 
 # Banner
 def print_banner():
@@ -87,11 +88,23 @@ def recover_coin():
         print(Fore.RED + f"Recover Coin Error: {e}" + Style.RESET_ALL)
         return None
 
+def start_digging():
+    try:
+        response = requests.post(START_DIGGING_URL, headers=HEADERS)
+        if response.status_code == 200:
+            print(Fore.GREEN + "Start Digging: Berhasil" + Style.RESET_ALL)
+        else:
+            print(Fore.RED + "Start Digging: Selesai" + Style.RESET_ALL)
+        return response.status_code
+    except requests.RequestException as e:
+        print(Fore.RED + f"Start Digging Error: {e}" + Style.RESET_ALL)
+        return None
+
 def main():
     print_banner()
     while True:
         print("\nMenu:")
-        print("1. Jalankan Daily Checkin dan Claim Reward")
+        print("1. Jalankan Daily Checkin, Claim Reward, dan Start Digging")
         print("2. Jalankan Loop Collect Coin dan Recover Coin")
         print("0. Keluar")
         
@@ -107,6 +120,9 @@ def main():
             time.sleep(1)
             print(Fore.GREEN + "Menjalankan Claim Reward..." + Style.RESET_ALL)
             claim_reward()
+            time.sleep(1)
+            print(Fore.GREEN + "Menjalankan Start Digging..." + Style.RESET_ALL)
+            start_digging()
         
         elif choice == 2:
             print(Fore.YELLOW + "Memulai Loop Collect/Recover Coin (Tekan Ctrl+C untuk berhenti)..." + Style.RESET_ALL)
